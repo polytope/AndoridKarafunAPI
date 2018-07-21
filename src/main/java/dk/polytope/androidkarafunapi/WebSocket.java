@@ -1,6 +1,7 @@
 package dk.polytope.androidkarafunapi;
 
 import android.util.Log;
+import java.security.InvalidParameterException;
 import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -17,6 +18,14 @@ public class WebSocket extends WebSocketListener implements Socket {
 
   public WebSocket(String serverUrl, Callback<String> responseCallback,
       Callback<Boolean> connectedCallback) {
+    // ensure that address starts with "ws://"
+    if (!serverUrl.startsWith("ws://")) {
+      throw new InvalidParameterException(
+          String.format("Address \"%s\", does not start with \"ws://\" and is therefore "
+              + "not a valid WebSocket URL.", serverUrl)
+      );
+    }
+
     client = new OkHttpClient.Builder()
         .readTimeout(3, TimeUnit.SECONDS)
         .build();
@@ -50,7 +59,7 @@ public class WebSocket extends WebSocketListener implements Socket {
   @Override
   public void onMessage(okhttp3.WebSocket webSocket, String text) {
     super.onMessage(webSocket, text);
-    if(responseCallback != null) {
+    if (responseCallback != null) {
       responseCallback.call(text);
     }
     Log.v("WebSocket", text);
@@ -65,7 +74,7 @@ public class WebSocket extends WebSocketListener implements Socket {
   public void onClosed(okhttp3.WebSocket webSocket, int code, String reason) {
     super.onClosed(webSocket, code, reason);
     this.isConnected = false;
-    if(connectedCallback != null) {
+    if (connectedCallback != null) {
       connectedCallback.call(false);
     }
   }
@@ -73,12 +82,20 @@ public class WebSocket extends WebSocketListener implements Socket {
   @Override
   public void onFailure(okhttp3.WebSocket webSocket, Throwable t, Response response) {
     super.onFailure(webSocket, t, response);
-    String message = response != null ? response.message() : t.getMessage();
     this.isConnected = false;
-    if(connectedCallback != null) {
+    if (connectedCallback != null) {
       connectedCallback.call(false);
     }
-    Log.v("WebSocket", message);
+
+    if (response != null) {
+      Log.v("WebSocket", response.message());
+    } else if (t == null) {
+      Log.v("WebSocket", "something went wrong");
+    } else if (t.getMessage() != null) {
+      Log.v("WebSocket", t.getMessage());
+    } else {
+      Log.v("WebSocket", t.getClass().getName());
+    }
   }
 
   @Override

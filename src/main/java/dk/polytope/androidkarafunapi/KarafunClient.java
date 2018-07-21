@@ -50,7 +50,9 @@ public class KarafunClient {
   }
 
   public void close() {
-    socket.close();
+    if (socket != null) {
+      socket.close();
+    }
     socket = null;
   }
 
