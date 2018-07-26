@@ -36,6 +36,7 @@ public class WebSocket extends WebSocketListener implements Socket {
 
   @Override
   public boolean send(final String message) {
+    Log.v("Websocket send", message);
     return webSocket.send(message);
   }
 
@@ -77,24 +78,27 @@ public class WebSocket extends WebSocketListener implements Socket {
     if (connectedCallback != null) {
       connectedCallback.call(false);
     }
+    Log.v("Websocket closing",code + ": " + reason);
   }
 
   @Override
   public void onFailure(okhttp3.WebSocket webSocket, Throwable t, Response response) {
     super.onFailure(webSocket, t, response);
+    t.printStackTrace(System.err);
     this.isConnected = false;
     if (connectedCallback != null) {
       connectedCallback.call(false);
     }
 
     if (response != null) {
-      Log.v("WebSocket", response.message());
+      Log.v("WebSocket fail", response.message());
+      Log.v("WebSocket fail", t.getMessage());
     } else if (t == null) {
-      Log.v("WebSocket", "something went wrong");
+      Log.v("WebSocket fail", "something went wrong");
     } else if (t.getMessage() != null) {
-      Log.v("WebSocket", t.getMessage());
+      Log.v("WebSocket fail", t.getMessage());
     } else {
-      Log.v("WebSocket", t.getClass().getName());
+      Log.v("WebSocket fail", t.getClass().getName());
     }
   }
 

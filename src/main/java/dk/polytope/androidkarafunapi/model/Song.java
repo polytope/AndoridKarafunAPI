@@ -17,8 +17,8 @@ public class Song implements Acceptable {
     private int id;
     private String title;
     private String artist;
-    private int year;
-    private int duration; // in seconds
+    private String year;
+    private String duration; // in seconds
     private String singer;
     private ItemState status;
 
@@ -34,11 +34,11 @@ public class Song implements Acceptable {
         return artist;
     }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
 
-    public int getDuration() {
+    public String getDuration() {
         return duration;
     }
 
@@ -87,10 +87,10 @@ public class Song implements Acceptable {
                     artist = KarafunXMLHelpers.readTag(parser, "artist");
                     break;
                 case "year":
-                    year = KarafunXMLHelpers.readTagAsInt(parser, "year");
+                    year = KarafunXMLHelpers.readTag(parser, "year");
                     break;
                 case "duration":
-                    duration = KarafunXMLHelpers.readTagAsInt(parser, "duration");
+                    duration = KarafunXMLHelpers.readTag(parser, "duration");
                     break;
                 case "singer":
                     singer = KarafunXMLHelpers.readTag(parser, "singer");
