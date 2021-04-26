@@ -48,6 +48,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     // Communication
-    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
