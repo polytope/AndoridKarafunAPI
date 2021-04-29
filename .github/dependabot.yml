@@ -1,0 +1,16 @@
+version: 2
+registries:
+  maven-repository-api-mapbox-com-downloads-v2-releases-maven:
+    type: maven-repository
+    url: https://api.mapbox.com/downloads/v2/releases/maven
+    username: mapbox
+    password: "${{secrets.MAVEN_REPOSITORY_API_MAPBOX_COM_DOWNLOADS_V2_RELEASES_MAVEN_PASSWORD}}"
+
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  registries:
+  - maven-repository-api-mapbox-com-downloads-v2-releases-maven
